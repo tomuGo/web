@@ -14,5 +14,10 @@ spring:
     database: 0
     host: ubuntu
     port: 6379
+  data:
+      mongodb:
+        host: ubuntu
+        port: 27017
+        database: test
 zhongkouwei:
   timeOut: 7

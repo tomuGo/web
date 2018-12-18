@@ -18,6 +18,7 @@ public class RoleRpc {
     @RpcHandler
     public List<RoleInfo> getRoleInfoByUserId(Integer userId){
         ResultSub<List<RoleInfo>>resultSub=roleClient.getRoleInfosByUserId(userId);
+        RpcUtil.resultHandler(resultSub);
         return resultSub.getData();
     }
 

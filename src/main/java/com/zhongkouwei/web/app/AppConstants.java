@@ -9,6 +9,7 @@ public interface AppConstants {
     String SESSION_USER = "userInfo: ";
 
     String SESSION_ROLE = "roleInfo: ";
+    String SESSION_TOKEN = "token: ";
 
     String HEADER_TOKEN = "token";
 
