@@ -9,8 +9,6 @@ import com.zhongkouwei.user.common.model.ResultSub;
 import com.zhongkouwei.web.aop.TokenHandler;
 import com.zhongkouwei.web.prc.BlogRpc;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,7 +19,7 @@ public class BlogController {
 
     @TokenHandler
     @RequestMapping(value = "blogs", method = RequestMethod.POST)
-    public ResultSub<String> addBlog(BlogDTO blogDTO) {
+    public ResultSub<String> addBlog(@RequestBody BlogDTO blogDTO) {
         String blogId = blogRpc.addBlog(blogDTO);
         return new ResultSub<>(blogId);
     }
@@ -35,6 +33,7 @@ public class BlogController {
         Byte boutique = null;
         if (BlogType.GOOD.getBlogType().equals(blogType)) {
             boutique = 1;
+            blogType = null;
         }
         PageInfo<Blog> blogs = blogRpc.getBlogs(pageNumber, pageSize, userId, blogType, boutique, blogName);
         return new ResultSub<>(blogs);

@@ -4,7 +4,6 @@ import com.zhongkouwei.user.common.model.PasswordModel;
 import com.zhongkouwei.user.common.model.ResultSub;
 import com.zhongkouwei.user.common.model.UserInfo;
 import com.zhongkouwei.web.aop.TokenHandler;
-import com.zhongkouwei.web.component.CurrentUserComponent;
 import com.zhongkouwei.web.model.RegisterUser;
 import com.zhongkouwei.web.prc.UserRpc;
 import org.springframework.beans.BeanUtils;
@@ -40,7 +39,7 @@ public class UserController {
     }
 
     @TokenHandler
-    @RequestMapping(value = "users/{id}",method = RequestMethod.PATCH)
+    @RequestMapping(value = "users/{id}",method = RequestMethod.PUT)
     public ResultSub<Boolean> updateUser(@PathVariable("id")Integer userId,@RequestBody UserInfo userInfo){
         userPrc.updateUser(userInfo,userId);
 
@@ -48,7 +47,7 @@ public class UserController {
     }
 
     @TokenHandler
-    @RequestMapping(value = "users/{id}",method = RequestMethod.PUT)
+    @RequestMapping(value = "users/updatePassword",method = RequestMethod.PUT)
     public ResultSub<Boolean> updatePassword(@RequestBody PasswordModel passwordModel){
         Assert.notNull(passwordModel.getUserId(),"用户不能为空");
         Assert.notNull(passwordModel.getNewPassword(),"新密码不能为空");
