@@ -25,15 +25,16 @@ public class UserRpc {
         return userInfoResultSub.getData();
     }
 
-    public Integer addUser(UserInfo userInfo){
-        ResultSub<Integer>userid=userClient.addUser(userInfo);
+    public UserInfo addUser(UserInfo userInfo){
+        ResultSub<UserInfo>userid=userClient.addUser(userInfo);
         RpcUtil.resultHandler(userid);
         return userid.getData();
     }
 
-    public void updateUser(UserInfo userInfo,Integer userId){
-        ResultSub resultSub=userClient.updateUser(userInfo,userId);
+    public UserInfo updateUser(UserInfo userInfo,Integer userId){
+        ResultSub<UserInfo> resultSub=userClient.updateUser(userInfo,userId);
         RpcUtil.resultHandler(resultSub);
+        return resultSub.getData();
     }
 
     public void updatePassword(PasswordModel passwordModel){

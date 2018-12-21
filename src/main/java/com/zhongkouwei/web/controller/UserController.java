@@ -4,6 +4,7 @@ import com.zhongkouwei.user.common.model.PasswordModel;
 import com.zhongkouwei.user.common.model.ResultSub;
 import com.zhongkouwei.user.common.model.UserInfo;
 import com.zhongkouwei.web.aop.TokenHandler;
+import com.zhongkouwei.web.component.RedisComponent;
 import com.zhongkouwei.web.model.RegisterUser;
 import com.zhongkouwei.web.prc.UserRpc;
 import org.springframework.beans.BeanUtils;
@@ -17,11 +18,15 @@ public class UserController {
 
     @Autowired
     UserRpc userPrc;
+    @Autowired
+    RedisComponent redisComponent;
 
-    @TokenHandler
     @RequestMapping(value = "users/{id}",method = RequestMethod.GET)
     public ResultSub<UserInfo> getUserInfoByUserId(@PathVariable("id")Integer userId){
-        UserInfo userInfo=userPrc.getUserInfoByUserId(userId);
+        UserInfo userInfo=redisComponent.getUserInfoFromRedisByUserId(userId);
+        if(userInfo==null){
+            userInfo=userPrc.getUserInfoByUserId(userId);
+        }
         return new ResultSub<>(userInfo);
     }
 
@@ -34,15 +39,16 @@ public class UserController {
         UserInfo userInfo=new UserInfo();
         BeanUtils.copyProperties(registerUser,userInfo);
         userInfo.setIsManage((byte)0);
-        Integer userId=userPrc.addUser(userInfo);
-        return new ResultSub<>(userId);
+        UserInfo addedUser=userPrc.addUser(userInfo);
+        redisComponent.set(addedUser);
+        return new ResultSub<>(addedUser.getUserId());
     }
 
     @TokenHandler
     @RequestMapping(value = "users/{id}",method = RequestMethod.PUT)
     public ResultSub<Boolean> updateUser(@PathVariable("id")Integer userId,@RequestBody UserInfo userInfo){
-        userPrc.updateUser(userInfo,userId);
-
+        UserInfo updatedUser=userPrc.updateUser(userInfo,userId);
+        redisComponent.set(updatedUser);
         return new ResultSub<>(Boolean.TRUE);
     }
 
