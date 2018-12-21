@@ -61,8 +61,7 @@ public class LoginController {
 
     private String login(UserInfo userInfo){
         String token=UUID.randomUUID().toString();
-        redisComponent.set(AppConstants.SESSION_TOKEN+token,"");
-        redisComponent.set(AppConstants.SESSION_USER+token,userInfo);
+        redisComponent.set(AppConstants.SESSION_TOKEN+token,userInfo);
         if(AppConstants.IS_MANAGE.equals(userInfo.getIsManage())){
             List<RoleInfo>roleInfos=roleRpc.getRoleInfoByUserId(userInfo.getUserId());
             if(!CollectionUtils.isEmpty(roleInfos)){

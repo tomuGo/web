@@ -44,10 +44,10 @@ public class HandlerAspect {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String token = request.getHeader(AppConstants.HEADER_TOKEN);
         System.out.println("token:" + token);
-        if (StringUtils.isEmpty(token) || !redisComponent.exits(AppConstants.SESSION_TOKEN + token)) {
+        if (StringUtils.isEmpty(token)) {
             return errorHandler(401, "登陆失效");
         }
-        UserInfo userInfo = redisComponent.getUserInfoFromRedis(AppConstants.SESSION_USER + token);
+        UserInfo userInfo = redisComponent.getUserInfoFromRedis(AppConstants.SESSION_TOKEN + token);
         if (userInfo == null) {
             return errorHandler(401, "登陆失效");
         }
